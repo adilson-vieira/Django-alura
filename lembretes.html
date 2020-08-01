@@ -1,0 +1,97 @@
+1) criar o ambiente virtual:
+python -m venv /path/to/new/virtual/environment
+
+2) comando para ativar o ambiente virtual: activate (não é o activate.bat)
+
+3) pip install django
+
+4) Visualiza os pacotes instalados: pip freeze
+./bin/django-admin startproject alurareceita . # Cria o projeto no mesmo diretório
+
+5) Um Project pode conter um ou mais apps django
+   virtualenv --python='/usr/local/bin/python3' ENV
+
+   <Ctrl> + <Shift> + <P>, Python: Select Interpreter
+
+7) Lista os comandos disponíveis: python manage.py help
+
+6) Subindo o servidor: python .\manage.py runserver 
+
+8) Cria o app receitas: python manage.py startapp receitas
+
+9) No arquivo settings.py, registra nova aplicação 'receitas'
+    INSTALLED_APPS = [   
+    'receitas',
+    ...
+]
+
+10) Cria uma view em receitas 'views.py' em 'receitas'
+def index(request):
+    return HttpResponse('<h1>receitas</h1>')
+
+    project
+        |_ urls.py (arquivos urls dos apps)
+             |_ app
+                 |_ urls.py (rotas e views correspondentes)
+                      |_ views.py
+                            |_ templates (arquivos html)
+
+11) No arquivo urls.py em 'receitas', registra novo path 'receitas.urls'
+urlpatterns = [
+    path('', views.index, name='index')
+]
+
+12) No arquivo urls.py em 'alurareceita', registra novo path 'receitas.urls'
+urlpatterns = [
+    path('', include('receitas.urls')),
+    path('admin/', admin.site.urls),
+]
+
+ARQUIVOS ESTÁTICOS - https://docs.djangoproject.com/en/2.2/topics/templates/
+arquivo settings da aplicação:
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, 'receitas/templates') ], ## informa o local dos templates
+...
+STATIC_ROOT = os.path.join(BASE_DIR, 'static') #inclui esta linha ao final
+STATIC_URL = '/static/'
+STATICFILES_DIRS =[                            #esta linha também 
+    os.path.join(BASE_DIR, 'alurareceita/static')
+]
+
+Arquivo HTML
+{% load static %} # primeira linha do arquivo
+<!DOCTYPE html>
+...
+<img src="{% static 'img/core-img/pizza.png' %}" alt=""> #para carregar imagens
+...
+<!-- ##### All Javascript Files ##### -->
+    <!-- jQuery-2.2.4 js -->
+    <script src="{% static 'js/jquery/jquery-2.2.4.min.js' %}"></script>
+    <!-- Popper js -->
+    <script src="{% static 'js/bootstrap/popper.min.js' %}"></script>
+    <!-- Bootstrap js -->
+    <script src="{% static 'js/bootstrap/bootstrap.min.js' %}"></script>
+    <!-- All Plugins js -->
+    <script src="{% static 'js/plugins/plugins.js' %}"></script>
+    <!-- Active js -->
+    <script src="{% static 'js/active.js' %}"></script>
+</body>
+</html>
+
+Links html  <a href="{% url 'receita' %}"></a>
+
+13) models.py # arquivo de modelos para uso com o django.db 
+
+14) python manage.py makemigrations # cria as alterações a serem feitas no banco de dados
+                                    # O comando makemigrations cria novas migrações com base 
+                                    # nas alterações detectadas nos modelos.
+    python manage.py migrate # atualiza o bd com os modelos criados
+                             # O comando migrate sincroniza o estado do banco de dados 
+                             # com o conjunto atual de modelos e migrações.
+
+15) admin.py #
+
+admin.site.register(Receita) # registra um modelo do db para administração do site
+                             # models.Model   
