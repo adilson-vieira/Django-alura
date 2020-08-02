@@ -91,7 +91,33 @@ Links html  <a href="{% url 'receita' %}"></a>
                              # O comando migrate sincroniza o estado do banco de dados 
                              # com o conjunto atual de modelos e migrações.
 
-15) admin.py #
+15) Para acessar o Django Admin:
+
+python manage.py createsuperuser
+
+Quando teclamos "Enter", o sistema nos pede um nome de usuário, um e-mail caso queira 
+e uma senha de acesso seguindo as orientações de segurança que o Django nos fornece.
+
+16) admin.py #
 
 admin.site.register(Receita) # registra um modelo do db para administração do site
-                             # models.Model   
+                             # models.Model 
+
+17) Passando parâmetros na url:
+        
+        arquivo index.html:
+        <a href="{% url 'receita' receita.id %}"></a>
+
+        arquivo urls.py:
+        urlpatterns = [
+        ...
+            path('<int:receita_id>', views.receita, name='receita')
+        ]
+
+        arquivo views.py:
+        def receita(request, receita_id):
+            receita = get_object_or_404(Receita, pk=receita_id) # Model, primary key
+            receita_a_exibir = {
+                'receita': receita
+            }
+            return render(request, 'receita.html', receita_a_exibir)
