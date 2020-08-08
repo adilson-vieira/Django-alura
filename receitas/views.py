@@ -16,8 +16,11 @@ def index(request):
         3: 'Sorvete'
     } """
 
-    receitas = Receita.objects.all() # busca as receitas no BD
-
+    # receitas = Receita.objects.all() # busca as receitas no BD
+    # receitas = Receita.objects.filter(publicada=True) # busca as receitas no BD com filtro   
+    
+    receitas = Receita.objects.order_by('-date_receita').filter(publicada=True) # data mais recente no topo
+    
     dados ={
         'receitas': receitas 
     }
